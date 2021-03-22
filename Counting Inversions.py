@@ -2,57 +2,61 @@
 #Javier Maldonado Rivera
 #CIIC4025-066
 
-def homieCheckFront(array,current,index):
-    if(array[current] < array[current + index]):
+def partition(arr, low, high):
+    i = (low - 1)
+    pivot = arr[high]
 
-        if (current + index + 1 == len(array)):
-            return True
+    for j in range(low, high):
 
-        else:
-            homieCheckFront(array, current, index + 1)
+        if arr[j] <= pivot:
 
-    else:
+            i = i + 1
 
-        return current + index
+            arr[i], arr[j] = arr[j], arr[i]
 
-def homieCheckBack(array,current,index):
-    if (array[current] > array[current - index]):
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
 
-        if(current - index + 1 < 0):
+    return (i + 1)
 
-            return True
+def quickSort(arr, low, high):
 
-        else:
+    if len(arr) == 1:
 
-            homieCheckBack(array,current,index+1)
+        return arr
 
-    else:
+    if low < high:
 
-        return current - index
+        pi = partition(arr, low, high)
 
+        quickSort(arr, low, pi - 1)
 
-def homieSwap(array,current,index):
-    if(homieCheckBack(array,current)):
-        holdup = array[current+index]
-        homie = array[current]
-        array[current] = holdup
-        array[current+1] = homie
+        quickSort(arr, pi + 1, high)
 
 
-def homieSort(array):
+def getInvCount(arr, n):
+    inv_count = 0
+    for i in range(n):
+        for j in range(i + 1, n):
+            if (arr[i] > arr[j]):
+                inv_count += 1
 
-    inversion = 0
-
-    l = len(array) - 1
-
-    middle = l//2
-    if(homieCheckBack(array,middle,1).isinstance(int)):
-        homieSwap(ar)
+    return inv_count
 
 
 
+def sort_and_counting(array):
+
+    print(array)
+
+    quickSort(array, 0, len(array) - 1)
+    n = getInvCount(array, len(array))
+    print(n)
+    tup = (array, n)
+    print(tup)
 
 
 
 
-# sort_and_counting(array):
+arr = [1,20,6,4,5]
+sort_and_counting(arr)
+
