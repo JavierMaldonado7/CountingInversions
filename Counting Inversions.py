@@ -2,61 +2,70 @@
 #Javier Maldonado Rivera
 #CIIC4025-066
 
-def partition(arr, low, high):
-    i = (low - 1)
-    pivot = arr[high]
 
-    for j in range(low, high):
+def mSort(arr):
 
-        if arr[j] <= pivot:
+    temp_arr = [0] * len(arr)
+    return mergeSort(arr, temp_arr, 0, len(arr) - 1)
 
-            i = i + 1
+def mergeSort(arr, temp_arr, left, right):
 
-            arr[i], arr[j] = arr[j], arr[i]
+    inversion = 0
 
-    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    if left < right:
 
-    return (i + 1)
+        middle = (left + right) // 2
 
-def quickSort(arr, low, high):
+        inversion = inversion + mergeSort(arr, temp_arr,left, middle)[1]
 
-    if len(arr) == 1:
-
-        return arr
-
-    if low < high:
-
-        pi = partition(arr, low, high)
-
-        quickSort(arr, low, pi - 1)
-
-        quickSort(arr, pi + 1, high)
+        inversion = inversion +  mergeSort(arr, temp_arr,middle + 1, right)[1]
 
 
-def getInvCount(arr, n):
-    inv_count = 0
-    for i in range(n):
-        for j in range(i + 1, n):
-            if (arr[i] > arr[j]):
-                inv_count += 1
+        inversion = inversion + merge(arr, temp_arr, left, middle, right)
 
-    return inv_count
+    TUP = (temp_arr,inversion)
+
+    return TUP
 
 
+def merge(arr, temp_arr, left, mid, right):
+    i = left
+    j = mid + 1
+    k = left
+    inversion = 0
 
-def sort_and_counting(array):
+    while i <= mid and j <= right:
 
-    print(array)
+        if arr[i] <= arr[j]:
+            temp_arr[k] = arr[i]
+            k += 1
+            i += 1
+        else:
 
-    quickSort(array, 0, len(array) - 1)
-    n = getInvCount(array, len(array))
-    print(n)
-    tup = (array, n)
-    print(tup)
+            temp_arr[k] = arr[j]
+            inversion += (mid - i + 1)
+            k += 1
+            j += 1
+
+    while i <= mid:
+        temp_arr[k] = arr[i]
+        k += 1
+        i += 1
 
 
+    while j <= right:
+        temp_arr[k] = arr[j]
+        k += 1
+        j += 1
+
+    for a in range(left, right + 1):
+        arr[a] = temp_arr[a]
+
+    return inversion
+
+def sort_and_counting(arr):
+
+    return (mSort(arr))
 
 
-arr = [1,20,6,4,5]
-sort_and_counting(arr)
 
